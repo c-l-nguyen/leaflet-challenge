@@ -7,7 +7,7 @@ function getColor(magnitude) {
                              '#b8f15a' ;
 }
 
-function createFeatures(earthquakeData) {
+function createFeatures(earthquakeData, plateData) {
 
     // Define a function we want to run once for each feature in the features array
     // Give each feature a popup describing the place and time of the earthquake
@@ -32,11 +32,15 @@ function createFeatures(earthquakeData) {
         onEachFeature: onEachFeature
     });
 
+    const plates = L.geoJSON(plateData, {
+        color: "orange"
+    });
+
     // Sending our earthquakes layer to the createMap function
-    createMap(earthquakes);
+    createMap(earthquakes, plates);
 }
 
-function createMap(earthquakes) {
+function createMap(earthquakes, plates) {
 
     // Define lightmap layers
     const satellite = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -69,14 +73,15 @@ function createMap(earthquakes) {
 
     // Create overlay object to hold our overlay layer
     const overlayMaps = {
-        Earthquakes: earthquakes
+        Earthquakes: earthquakes,
+        Plates: plates
     };
 
     // Create our map, giving it the satellite and earthquakes layers to display on load
     const myMap = L.map("map", {
-            center: [37.09, -95.71],
-            zoom: 5,
-            layers: [satellite, earthquakes]
+        center: [37.09, -95.71],
+        zoom: 5,
+        layers: [satellite, earthquakes]
     });
 
     // Create a layer control
@@ -95,12 +100,13 @@ function createMap(earthquakes) {
         mag_categories_color = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5]
 
         for (let i = 0; i < mag_categories.length; i++) {
-                div.innerHTML += 
-                labels.push(
-                    '<i style="background:' + getColor(mag_categories_color[i]) + '"></i> ' +
-                (mag_categories[i] ? mag_categories[i] : '+'));
-            }
-            div.innerHTML = labels.join('<br>');
+            div.innerHTML += 
+            labels.push(
+                '<i style="background:' + getColor(mag_categories_color[i]) + '"></i> ' +
+            (mag_categories[i] ? mag_categories[i] : '+'));
+        }
+        div.innerHTML = labels.join('<br>');
+        
         return div;
     };
     legend.addTo(myMap);
@@ -109,8 +115,11 @@ function createMap(earthquakes) {
 
 (async function(){
     const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson";
-    const data = await d3.json(queryUrl);
+    const earthquakeData = await d3.json(queryUrl);
 
-    // Once we get a response, send the data.features object to the createFeatures function
-    createFeatures(data.features);
+    const plateUrl = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
+    const plateData = await d3.json(plateUrl);
+
+    // Once we get a response, send the data.features objects to the createFeatures function
+    createFeatures(earthquakeData.features, plateData.features);
 })()
