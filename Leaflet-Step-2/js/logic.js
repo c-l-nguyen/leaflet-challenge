@@ -1,17 +1,10 @@
-function getColor(magnitude){
-    if (magnitude < 1){
-        return color = "#b8f15a";
-    } else if (magnitude < 2){
-        return color = "#e2f15b";
-    } else if (magnitude < 3){
-        return color = "#f2db5a";
-    } else if (magnitude < 4){
-        return color = "#f2b957";
-    } else if (magnitude < 5){
-        return color = "#eea770";
-    } else {
-        return color = "#ee6c6e";
-    }
+function getColor(magnitude) {
+    return  magnitude > 5  ? '#ee6c6e' :
+            magnitude > 4  ? '#eea770' :
+            magnitude > 3  ? '#f2b957' :
+            magnitude > 2  ? '#f2db5a' :
+            magnitude > 1  ? '#e2f15b' :
+                             '#b8f15a' ;
 }
 
 function createFeatures(earthquakeData) {
