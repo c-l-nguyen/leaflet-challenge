@@ -81,7 +81,7 @@ function createMap(earthquakes, plates) {
     const myMap = L.map("map", {
         center: [37.09, -95.71],
         zoom: 5,
-        layers: [satellite, earthquakes]
+        layers: [satellite, plates, earthquakes]
     });
 
     // Create a layer control
@@ -90,6 +90,11 @@ function createMap(earthquakes, plates) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
+
+    // Keep the earthquakes layer on top at all times when it is on
+    myMap.on("overlayadd", function (event) {
+        earthquakes.bringToFront();
+    });
 
     // Add in our legend
     let legend = L.control({position: 'bottomright'});
