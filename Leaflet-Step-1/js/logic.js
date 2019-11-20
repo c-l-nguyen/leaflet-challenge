@@ -38,19 +38,19 @@ function createFeatures(earthquakeData) {
 
 function createMap(earthquakes) {
 
-    // Define lightmap layers
+    // Define lightmap layer
     const lightmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-            attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-            maxZoom: 18,
-            id: "mapbox.light",
-            accessToken: API_KEY
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.light",
+        accessToken: API_KEY
     });
 
     // Create our map, giving it the streetmap and earthquakes layers to display on load
     const myMap = L.map("map", {
-            center: [37.09, -95.71],
-            zoom: 5,
-            layers: [lightmap, earthquakes]
+        center: [37.09, -119.42],
+        zoom: 5,
+        layers: [lightmap, earthquakes]
     });
 
     // Add in our legend
@@ -75,7 +75,7 @@ function createMap(earthquakes) {
 }
 
 (async function(){
-    const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson";
+    const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
     const data = await d3.json(queryUrl);
 
     // Once we get a response, send the data.features object to the createFeatures function

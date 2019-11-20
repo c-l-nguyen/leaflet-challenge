@@ -32,36 +32,37 @@ function createFeatures(earthquakeData, plateData) {
         onEachFeature: onEachFeature
     });
 
+    // Create a GeoJSON layer for the platesData object
     const plates = L.geoJSON(plateData, {
         color: "orange"
     });
 
-    // Sending our earthquakes layer to the createMap function
+    // Sending our earthquakes and plates layers to the createMap function
     createMap(earthquakes, plates);
 }
 
 function createMap(earthquakes, plates) {
 
-    // Define lightmap layers
+    // Define tileLayers
     const satellite = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-            attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-            maxZoom: 18,
-            id: "mapbox.streets-satellite",
-            accessToken: API_KEY
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.streets-satellite",
+        accessToken: API_KEY
     });
 
     const grayscale = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-            attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-            maxZoom: 18,
-            id: "mapbox.light",
-            accessToken: API_KEY
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.light",
+        accessToken: API_KEY
     });
 
     const outdoors = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-            attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-            maxZoom: 18,
-            id: "mapbox.outdoors",
-            accessToken: API_KEY
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.outdoors",
+        accessToken: API_KEY
     });
 
     // Define a baseMaps object to hold our base layers
@@ -79,7 +80,7 @@ function createMap(earthquakes, plates) {
 
     // Create our map, giving it the satellite and earthquakes layers to display on load
     const myMap = L.map("map", {
-        center: [37.09, -95.71],
+        center: [37.09, -119.42],
         zoom: 5,
         layers: [satellite, plates, earthquakes]
     });
@@ -119,7 +120,7 @@ function createMap(earthquakes, plates) {
 }
 
 (async function(){
-    const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson";
+    const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
     const earthquakeData = await d3.json(queryUrl);
 
     const plateUrl = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
